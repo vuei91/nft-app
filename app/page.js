@@ -1,5 +1,5 @@
 "use client";
-import { pinFileToIPFS } from "@/utils/pinata";
+import { pinFileToIPFS, pinJSONToIPFS } from "@/utils/pinata";
 import React from "react";
 
 const Home = () => {
@@ -8,9 +8,12 @@ const Home = () => {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          const files = e.target[0].files;
-          const data = await pinFileToIPFS(files[0]);
-          console.log(data);
+          // const files = e.target[0].files;
+          // const data = await pinFileToIPFS(files[0]);
+          // console.log(data);
+          const jsonData = { name: "v", age: "30" };
+          const res = await pinJSONToIPFS(jsonData);
+          console.log(res);
         }}
       >
         <input type="file" name="file" />
