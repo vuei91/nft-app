@@ -4,19 +4,15 @@ const JWT = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24
 
 export const pinFileToIPFS = async (selectedFile) => {
   const formData = new FormData();
-
   formData.append("file", selectedFile);
-
   const metadata = JSON.stringify({
     name: "File name",
   });
   formData.append("pinataMetadata", metadata);
-
   const options = JSON.stringify({
     cidVersion: 0,
   });
   formData.append("pinataOptions", options);
-
   const res = await axios.post(
     "https://api.pinata.cloud/pinning/pinFileToIPFS",
     formData,
