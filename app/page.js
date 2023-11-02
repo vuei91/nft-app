@@ -11,6 +11,8 @@ import {
 } from "wagmi";
 import TestNFT2ABI from "@/abi/TestNFT2ABI.json";
 import axios from "axios";
+import { Button, Flex, Input } from "antd";
+import TextArea from "antd/es/input/TextArea";
 
 const TestNFT2 = "0xE9Bc05261601520B643Ce4A6aaCF75b50d3afcC4";
 const TestNFT2Data = {
@@ -76,15 +78,15 @@ const Home = () => {
             }}
           >
             <p>
-              <input type="text" name="name" placeholder="name" />
+              <Input type="text" name="name" placeholder="name" />
             </p>
             <p>
-              <textarea
+              <TextArea
                 name="description"
                 cols="30"
                 rows="10"
                 placeholder="description"
-              ></textarea>
+              ></TextArea>
             </p>
             <p>
               <input type="file" name="file" />
@@ -92,7 +94,7 @@ const Home = () => {
             <input type="submit" value="전송" />
           </form>
           <p>
-            <button
+            <Button
               onClick={async () => {
                 const uris = data?.[2]?.result?.map((e) => e.uri);
                 const images = [];
@@ -104,7 +106,7 @@ const Home = () => {
               }}
             >
               이미지보기
-            </button>
+            </Button>
           </p>
           {images?.map((e, i) => (
             <p key={i}>
@@ -113,7 +115,7 @@ const Home = () => {
           ))}
         </div>
       ) : (
-        <button onClick={connect}>연결</button>
+        <Button onClick={connect}>연결</Button>
       )}
     </div>
   );
