@@ -41,6 +41,7 @@ const Home = () => {
     ...TestNFT2Data,
     functionName: "safeMint",
   });
+  const [images, setImages] = useState([]);
   return (
     <div style={{ width: "70%", margin: "auto" }}>
       {isConnected ? (
@@ -90,13 +91,26 @@ const Home = () => {
             </p>
             <input type="submit" value="전송" />
           </form>
-          {data?.[2]?.result.map((e, i) => {
-            return (
-              <div key={i}>
-                <div>{e?.uri}</div>
-              </div>
-            );
-          })}
+          <p>
+            <button
+              onClick={async () => {
+                const uris = data?.[2]?.result?.map((e) => e.uri);
+                const images = [];
+                for (let uri of uris) {
+                  const image = (await axios.get(uri)).data?.image;
+                  images.push(image);
+                }
+                setImages(images);
+              }}
+            >
+              이미지보기
+            </button>
+          </p>
+          {images?.map((e, i) => (
+            <p key={i}>
+              <img src={e} width={"100%"} />
+            </p>
+          ))}
         </div>
       ) : (
         <button onClick={connect}>연결</button>
