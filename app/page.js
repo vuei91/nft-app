@@ -108,7 +108,7 @@ const Home = () => {
           </p>
           {images?.map((e, i) => (
             <p key={i}>
-              <img src={e} width={"100%"} />
+              <img src={e} width={"50%"} />
             </p>
           ))}
         </div>
