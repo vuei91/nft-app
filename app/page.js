@@ -1,21 +1,21 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { pinFileToIPFS, pinJSONToIPFS } from "@/utils/pinata";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import {
   useAccount,
   useBalance,
   useConnect,
-  useContractRead,
   useContractReads,
   useContractWrite,
 } from "wagmi";
-import TestNFTABI from "@/abi/TestNFTABI.json";
+import TestNFT2ABI from "@/abi/TestNFT2ABI.json";
+import axios from "axios";
 
-const TestNFT = "0x3cBC667E4BB3B7bBDE7D29193250E7372e3027Ff";
-const TestNFTData = {
-  address: TestNFT,
-  abi: TestNFTABI,
+const TestNFT2 = "0xE9Bc05261601520B643Ce4A6aaCF75b50d3afcC4";
+const TestNFT2Data = {
+  address: TestNFT2,
+  abi: TestNFT2ABI,
 };
 
 const Home = () => {
@@ -28,13 +28,17 @@ const Home = () => {
   });
   const { data } = useContractReads({
     contracts: [
-      { ...TestNFTData, functionName: "name" },
-      { ...TestNFTData, functionName: "symbol" },
+      { ...TestNFT2Data, functionName: "name" },
+      { ...TestNFT2Data, functionName: "symbol" },
+      {
+        ...TestNFT2Data,
+        functionName: "getTokenInfoByOwner",
+        args: [address],
+      },
     ],
   });
-  const [{ result: name }, { result: symbol }] = data;
   const { write: safeMint } = useContractWrite({
-    ...TestNFTData,
+    ...TestNFT2Data,
     functionName: "safeMint",
   });
   return (
@@ -48,8 +52,8 @@ const Home = () => {
             {balance?.formatted} {balance?.symbol}
           </div>
           <h4>NFT 내용</h4>
-          <p>name: {name}</p>
-          <p>symbol: {symbol}</p>
+          <p>name: {data?.[0]?.result}</p>
+          <p>symbol: {data?.[1]?.result}</p>
           <h4>NFT 생성</h4>
           <form
             onSubmit={async (e) => {
@@ -86,6 +90,13 @@ const Home = () => {
             </p>
             <input type="submit" value="전송" />
           </form>
+          {data?.[2]?.result.map((e, i) => {
+            return (
+              <div key={i}>
+                <div>{e?.uri}</div>
+              </div>
+            );
+          })}
         </div>
       ) : (
         <button onClick={connect}>연결</button>
